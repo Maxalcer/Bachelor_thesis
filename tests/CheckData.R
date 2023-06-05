@@ -1,4 +1,5 @@
 library(perfectphyloR)
+library(lambda.r)
 
 lines <- readLines("train_inf.txt")
 
@@ -18,34 +19,36 @@ for (i in 1:length(lines)){
   }
   
 }
-mat <- matrix(mat, byrow = TRUE, ncol = 10)
+mat <- unique(matrix(mat, byrow = TRUE, ncol = 10))
 tables <- append(tables, list(mat))
 
 SNV_names <- c(paste("SNV", 1:10, sep = ""))
-hap_names <- c(paste("h", 1:10, sep = ""))
 SNV_posns <- c(1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 100000)
 
 count <- 0
 
 for (tab in tables){
+  hap_names <- c(paste("h", 1:nrow(tab), sep = ""))
   ex_hapMat <- createHapMat(hapmat = tab,
                             snvNames = SNV_names,
                             hapNames = hap_names,
                             posns = SNV_posns)
-  
+
   rdend <- reconstructPP(hapMat = ex_hapMat,
-                         focalSNV = 5,
+                         focalSNV = 10,
                          minWindow = 1,
                          sep = "-")
-  
-  is_fin <- TRUE
-  
-  for (lab in rdend[3]){
-    is_fin <- is_fin || grepl("-", lab, fixed = TRUE)
-  }
-  
-  if(is_fin){
-    count <- count + 1
+
+is_fin <- FALSE
+
+temp <- grepl("-", rdend[[3]], fixed = TRUE)
+
+for (t in temp){
+  is_fin <- is_fin || t
+}
+
+if(is_fin){
+  count <- count + 1
   }
 }
 
