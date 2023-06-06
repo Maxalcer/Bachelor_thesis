@@ -9,16 +9,16 @@ import torch.optim as optim
 class Netz(nn.Module):
   def __init__(self):
     super(Netz, self).__init__()
-    self.lin1 = nn.Linear(10,10)
+    self.lin1 = nn.Linear(100,100)
     self.lin2 = nn.Linear(100,20)
     self.lin3 = nn.Linear(20,2)
 
   def forward(self, x):
-    x = F.relu(self.lin1(x))
     x = x.view(-1, 100)
+    x = F.relu(self.lin1(x))
     x = F.relu(self.lin2(x))
     x = self.lin3(x)
-    return x
+    return F.softmax(x)
 
 def read_data(input):
 
@@ -87,9 +87,10 @@ random.shuffle(training_data)
 
 netz = Netz()
 
-optimizer = optim.Adam(netz.parameters(), lr = 0.01)
+optimizer = optim.Adam(netz.parameters(), lr = 0.1)
 
 for epoch in range(100):
+  print(epoch)
   train(epoch)
 
 data_inf = read_data("../data/test_inf.txt")
