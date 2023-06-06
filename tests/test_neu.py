@@ -61,7 +61,7 @@ def test():
 
   print("hitrate: ", hits/len(test_data))
 
-data_inf = read_data("train_inf.txt")
+data_inf = read_data("../data/train_inf.txt")
 
 train_inf = []
 
@@ -70,7 +70,7 @@ for matrix in data_inf:
 
 del data_inf
 
-data_fin = read_data("train_fin.txt")
+data_fin = read_data("../data/train_fin.txt")
 
 train_fin = []
 
@@ -87,12 +87,12 @@ random.shuffle(training_data)
 
 netz = Netz()
 
-optimizer = optim.Adam(netz.parameters(), lr = 0.1)
+optimizer = optim.Adam(netz.parameters(), lr = 0.01)
 
-for epoch in range(30):
+for epoch in range(100):
   train(epoch)
 
-data_inf = read_data("test_inf.txt")
+data_inf = read_data("../data/test_inf.txt")
 
 test_inf = []
 
@@ -101,7 +101,7 @@ for matrix in data_inf:
 
 del data_inf
 
-data_fin = read_data("test_fin.txt")
+data_fin = read_data("../data/test_fin.txt")
 
 test_fin = []
 
