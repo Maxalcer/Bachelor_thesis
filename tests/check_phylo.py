@@ -1,5 +1,6 @@
 import numpy as np
 import string
+import subprocess
 
 def check_inf_sites(m):
 
@@ -16,6 +17,17 @@ def check_inf_sites(m):
       if found_diff & found_same: return False
 
   return True
+
+def generate_matrix(ncols):
+  command = r"./ms 10 1 -t 5.0 -s " + str(ncols)
+  process = subprocess.Popen([r'./ms', '10', '1', '-t', '5.0', '-s', str(ncols)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=r'/home/max/msdir')
+  result = process.communicate()
+  lines = result[0].split('\n')
+  seeds = [int(i) for i in lines[1].split(' ')]
+  del lines[0:7]
+  del lines[len(lines)-1]
+  matrix = [list(map(int, list(line))) for line in lines]
+  return np.array(matrix), seeds
 
 def read_data(input):
 

@@ -63,14 +63,15 @@ c = 0
 
 # new_row = [a ^ b for a, b in zip(matrix[row], matrix[row+10])]
 
-for i in range(50):
+for i in range(500):
   n = np.random.choice(range(1,4), 1, p=probs)
   n = n[0]
   
   temp_data = generate_matrix(10+n)
 
   temp_data += (n,)
-  matrix = temp_data[0]
+
+  matrix = temp_data[0][:]
   break_inf_loop = 0
     
   while(check_inf_sites(matrix)):
@@ -78,7 +79,7 @@ for i in range(50):
     if break_inf_loop > comb(10, n):
       temp_data = generate_matrix(10+n)
       temp_data += (n,)
-      matrix = temp_data[0]
+      matrix = temp_data[0][:]
       break_inf_loop = 0
 
     cols = np.random.choice(range(10), n, replace=False)
@@ -96,8 +97,8 @@ for i in range(50):
 
 
 with open("../data/test_fin.txt", "w") as file:
-  for matrix in train_data:
-    for line in matrix:
+  for mat in train_data:
+    for line in mat:
       strl = ''
       for num in line:
         strl += str(num)
@@ -105,11 +106,11 @@ with open("../data/test_fin.txt", "w") as file:
     file.write("\n")
 
 with open("../data/test_original_fin.txt", "w") as file:
-  for matrix, seeds, n in orig_data:
+  for mat, seeds, n in orig_data:
     seedstr = [str(seed) for seed in seeds]
     file.write("seeds: "+ (' '.join(seedstr)) + "\n")
     file.write("added lines: "+ str(n) + "\n")
-    for line in matrix:
+    for line in mat:
       strl = ''
       for num in line:
         strl += str(num)
