@@ -1,41 +1,9 @@
+from hlp_fncs import *
 import random
 import subprocess
 import math
 import numpy as np
 from math import comb
-
-def read_data(input):
-
-  data = []
-
-  file = open(input, "r")
-
-  content = file.read()
-
-  matrices = content.split('\n\n')
-
-  for m in matrices:
-    rows = m.split('\n')
-    matrix = [list(map(int, list(row))) for row in rows]    
-    data.append(np.array(matrix))
-
-  return data
-
-def check_inf_sites(m):
-
-  for i in range(np.shape(m)[1]):
-    for j in range(i+1, np.shape(m)[1]):
-      col1 = m[:,i]
-      col2 = m[:,j]
-      indices1 = [i for i, x in enumerate(col1) if x == 1]
-      indices2 = [i for i, x in enumerate(col2) if x == 1]
-
-      found_diff = ((len(list(set(indices1) - set(indices2))) != 0) & (len(list(set(indices2) - set(indices1))) != 0))
-      found_same = (len(list(set(indices1) & set(indices2))) != 0)
-
-      if found_diff & found_same: return False
-
-  return True
 
 def generate_matrix(ncols):
   command = r"./ms 10 1 -t 5.0 -s " + str(ncols)

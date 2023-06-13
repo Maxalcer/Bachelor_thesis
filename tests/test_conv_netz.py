@@ -10,20 +10,18 @@ import torch.optim as optim
 class Netz(nn.Module):
   def __init__(self):
     super(Netz, self).__init__()
-    self.dropout = nn.Dropout(0.1)
-    self.lin1 = nn.Linear(10,10)
-    self.lin2 = nn.Linear(100,50)
-    self.lin3 = nn.Linear(50,20)
-    self.lin4 = nn.Linear(20,2)
+    self.conv1 = nn.Conv2d(1, 8, kernel_size=3, stride=1, padding=1)
+    self.conv2 = nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1)
+    self.lin1 = nn.Linear(16,2)
+
 
   def forward(self, x):    
+    x = F.max_pool2d(self.conv1(x), 2, 2)
+    x = F.relu(x)
+    x = F.max_pool2d(self.conv2(x), 2, 2)
+    x = F.relu(x)
+    x = x.view(-1, 16)
     x = F.relu(self.lin1(x))
-    x = x.view(-1,100)
-    x = self.dropout(x)
-    x = F.relu(self.lin2(x))
-    # x = self.dropout(x)
-    x = F.relu(self.lin3(x))
-    x = self.lin4(x)
     return F.softmax(x, dim=1)
 
 def train(epoch):
@@ -31,9 +29,11 @@ def train(epoch):
   total_loss = 0
   hits = 0
   for input, target in training_data:
-    #input = input.cuda()
-    input = Variable(input)
-    output = netz(input)
+    expanded_input = torch.unsqueeze(input, 0)
+    expanded_input = expanded_input.repeat(1,1,1)
+    expanded_input = Variable(expanded_input)
+    #expanded_input = expanded_input.cuda()
+    output = netz(expanded_input)
     if(torch.argmax(output[0]) == torch.argmax(target)):
       hits += 1
     #target = target.cuda()
@@ -53,7 +53,10 @@ def test():
   netz.eval()
   hits = 0
   for input, target in test_data:
-    output = netz(Variable(input))
+    expanded_input = torch.unsqueeze(input, 0)
+    expanded_input = expanded_input.repeat(1,1,1)
+    expanded_input = Variable(expanded_input)
+    output = netz(expanded_input)
     
     if(torch.argmax(output[0]) == torch.argmax(target)):
       hits += 1
@@ -85,9 +88,8 @@ del train_fin, train_inf
 random.shuffle(training_data)
 
 netz = Netz()
-
-# netz = netz.cuda()
-
+#netz = netz.cuda()
+#training_data = training_data.cuda()
 optimizer = optim.SGD(netz.parameters(), lr = 0.01)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
 for epoch in range(100):
