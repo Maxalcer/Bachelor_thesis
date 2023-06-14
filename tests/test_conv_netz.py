@@ -15,8 +15,8 @@ class Netz(nn.Module):
     self.conv2 = nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1)
     self.conv3 = nn.Conv2d(20, 30, kernel_size=3, stride=1, padding=1)
     self.drpout = nn.Dropout(0.2)
-    self.lin1 = nn.Linear(30, 12)
-    self.lin2 = nn.Linear(12,2)
+    self.lin1 = nn.Linear(30, 16)
+    self.lin2 = nn.Linear(16,2)
 
 
   def forward(self, x):    
@@ -31,6 +31,20 @@ class Netz(nn.Module):
     x = F.relu(self.lin1(x))
     x = F.relu(self.lin2(x))
     return F.softmax(x, dim=1)
+
+def test():
+  netz.eval()
+  hits = 0
+  for input, target in test_data:
+    expanded_input = torch.unsqueeze(input, 0).cuda()
+    expanded_input = expanded_input.repeat(1,1,1,1)
+    expanded_input = Variable(expanded_input)
+    output = netz(expanded_input)
+    
+    if(torch.argmax(output[0]) == torch.argmax(target)):
+      hits += 1
+
+  print("hitrate: ", hits/len(test_data))
 
 def train(epoch):
   netz.train()
@@ -52,20 +66,6 @@ def train(epoch):
   #scheduler.step()
   print("loss:", total_loss/len(training_data))
   
-def test():
-  netz.eval()
-  hits = 0
-  for input, target in test_data:
-    expanded_input = torch.unsqueeze(input, 0).cuda()
-    expanded_input = expanded_input.repeat(1,1,1,1)
-    expanded_input = Variable(expanded_input)
-    output = netz(expanded_input)
-    
-    if(torch.argmax(output[0]) == torch.argmax(target)):
-      hits += 1
-
-  print("hitrate: ", hits/len(test_data))
-
 training_data = get_train_dataset("../data/train_fin.txt", "../data/train_inf.txt", 64)
 
 netz = Netz()
@@ -74,9 +74,6 @@ netz = netz.cuda()
 
 optimizer = optim.Adam(netz.parameters(), lr = 0.001)
 #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
-for epoch in range(100):
-  print("epoch:", epoch+1)
-  train(epoch)
 
 data_inf = read_data_tens("../data/test_inf.txt")
 
@@ -100,4 +97,9 @@ test_data = test_inf + test_fin
 random.shuffle(test_data)
 del test_fin, test_inf
 
-test()
+for epoch in range(100):
+  print("epoch:", epoch+1)
+  train(epoch)
+  test()
+
+
