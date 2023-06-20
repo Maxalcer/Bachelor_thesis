@@ -51,3 +51,31 @@ def read_data_tens(input):
     data.append(torch.Tensor(matrix))
 
   return data
+
+def write_data(path, data):
+  with open(path, "w") as file:
+    for mat in data:
+      for line in mat:
+        strl = ''
+        for num in line:
+          strl += str(num)
+        file.write(strl+"\n")
+      file.write("\n")
+
+def convert(bitlist):
+  out = 0
+  for bit in bitlist:
+    out = (out << 1) | int(bit)
+  return(out)
+
+def sort_tensor(batched_tens):
+  for i in range(batched_tens.size()[0]):
+    int_tens = torch.Tensor([convert(batched_tens[i][:,j]) for j in range(batched_tens[i].size()[1])])
+    int_tens, indices = torch.sort(int_tens, descending=False)
+    batched_tens[i] = batched_tens[i][:, indices]
+
+def sort_matrix(mat):
+  int_cols = [convert(mat[:,j]) for j in range(np.shape(mat)[1])]
+  indices = np.argsort(int_cols)
+  mat = mat[:, indices]
+  return mat
