@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import random as rand
 import torch.nn as nn
 
 def read_data_mat(input):
@@ -78,4 +79,13 @@ def sort_matrix(mat):
   int_cols = [convert(mat[:,j]) for j in range(np.shape(mat)[1])]
   indices = np.argsort(int_cols)
   mat = mat[:, indices]
+  return mat
+
+def noise_matrix(mat, alpha, beta):
+  for i in range(np.shape(mat)[0]):
+    for j in range(np.shape(mat)[1]):
+      if mat[i,j] == 0:
+        if rand.random() < alpha: mat[i,j] = 1
+      else:
+        if rand.random() < beta: mat[i,j] = 0
   return mat

@@ -1,6 +1,4 @@
 from hlp_fncs import *
-import random
-import numpy as np
 
 train_data_fin = read_data_mat("../data/train_fin.txt")
 train_data_inf = read_data_mat("../data/train_inf.txt")
