@@ -102,8 +102,8 @@ def train(epoch):
   #loss_t.append((total_loss/(len(testing_data))))
   scheduler.step()
   
-training_data = get_train_dataset("../data/train_fin_manip.txt", "../data/train_inf_manip.txt", 256)
-testing_data = get_train_dataset("../data/test_fin_manip.txt", "../data/test_inf_manip.txt", 10)
+training_data = get_train_dataset("../data/train_fin_sorted.txt", "../data/train_inf_sorted.txt", 256)
+testing_data = get_train_dataset("../data/test_fin_sorted.txt", "../data/test_inf_sorted.txt", 10)
 netz = Netz()
 
 netz = netz.cuda()
