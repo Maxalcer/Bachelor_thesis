@@ -31,62 +31,44 @@ class Netz(nn.Module):
     return F.softmax(x, dim=1)
 
 netz = torch.load('conv_netz.py')
+netz = netz.cuda()
 
 def test():
   netz.eval()
   hits = 0
-  total_loss = 0
+  hits_algo = 0
   for input, target in testing_data:
+    is_inf = bool(np.array(target)[0,0])
+    input = torch.tensor(noise_matrix(np.array(input[0]), a, b))
+    algo_erg = check_inf_sites(np.array(input))
+    if (algo_erg == is_inf): hits_algo += 1
     expanded_input = torch.unsqueeze(input, 0).cuda()
     expanded_input = expanded_input.repeat(1,1,1,1)
     expanded_input = expanded_input.transpose(0, 1)
     expanded_input = Variable(expanded_input)
     output = netz(expanded_input)
     target = Variable(target).cuda()
-    criterion = nn.BCELoss()
-    loss = criterion(output, target)
-    total_loss += loss.item()
-    for i in range(10):
-      if(torch.argmax(output[i]) == torch.argmax(target[i])): hits += 1
-  print("Accuarcy:", hits/(len(testing_data)*10))
-  print("Loss:",(total_loss/(len(testing_data))))
-  return hits/(len(testing_data)*10)
+    if(torch.argmax(output) == torch.argmax(target)): hits += 1
+  return (hits/len(testing_data)), (hits_algo/len(testing_data))
 
 acc = []
 acc_algo = []
-noise = [0, 5, 15, 25]
+noise = []
 
-testing_data = get_train_dataset("../data/test_fin_sorted.txt", "../data/test_inf_sorted.txt", 10)
+b = 0
 
-testing_data_fin_0 = read_data_mat("../data/test_fin.txt")
-testing_data_inf_0 = read_data_mat("../data/test_inf.txt")
+testing_data = get_train_dataset("../data/test_fin_sorted.txt", "../data/test_inf_sorted.txt", 1)
+while (b <= 0.25):
+  print(b)
+  if(b == 0): a = 0
+  else: a = 10**(-5)
+  net, algo = test()
+  print(net)
+  acc.append(net)
+  acc_algo.append(algo)
+  noise.append(b)
+  b += 0.01
 
-acc.append(test())
-acc_algo.append(check_inf_sites_list(testing_data_inf_0, testing_data_fin_0))
-
-testing_data = get_train_dataset("../data/test_fin_noise_5_sorted.txt", "../data/test_inf_noise_5_sorted.txt", 10)
-
-testing_data_fin_5 = read_data_mat("../data/test_fin_noise_5.txt")
-testing_data_inf_5 = read_data_mat("../data/test_inf_noise_5.txt")
-
-acc.append(test())
-acc_algo.append(check_inf_sites_list(testing_data_inf_5, testing_data_fin_5))
-
-testing_data = get_train_dataset("../data/test_fin_noise_15_sorted.txt", "../data/test_inf_noise_15_sorted.txt", 10)
-
-testing_data_fin_15 = read_data_mat("../data/test_fin_noise_15.txt")
-testing_data_inf_15 = read_data_mat("../data/test_inf_noise_15.txt")
-
-acc.append(test())
-acc_algo.append(check_inf_sites_list(testing_data_inf_15, testing_data_fin_15))
-
-testing_data = get_train_dataset("../data/test_fin_noise_25_sorted.txt", "../data/test_inf_noise_25_sorted.txt", 10)
-
-testing_data_fin_25 = read_data_mat("../data/test_fin_noise_25.txt")
-testing_data_inf_25 = read_data_mat("../data/test_inf_noise_25.txt")
-
-acc.append(test())
-acc_algo.append(check_inf_sites_list(testing_data_inf_25, testing_data_fin_25))
 
 plt.plot(noise, acc, label = "CNN")
 plt.plot(noise, acc_algo, label = "Algorithm")
@@ -96,5 +78,4 @@ plt.title('Accuracy for different Noise Levels')
 plt.legend()
 plt.savefig('../results/Accuracy_Noise.png')
 plt.show()
-
 
