@@ -47,8 +47,6 @@ loss_e = []
 def test():
   netz.eval()
   hits = 0
-  #tp = 0
-  #fp = 0
   total_loss = 0
   for input, target in testing_data:
     expanded_input = torch.unsqueeze(input, 0).cuda()
@@ -62,11 +60,7 @@ def test():
     total_loss += loss.item()
     for i in range(10):
       if(torch.argmax(output[i]) == torch.argmax(target[i])): hits += 1
-      #if((torch.argmax(output[i]) == torch.argmax(target[i])) & (torch.argmax(output[i]) == torch.argmax(torch.Tensor([1,0])))): tp += 1
-      #if((torch.argmax(output[i]) != torch.argmax(target[i])) & (torch.argmax(output[i]) == torch.argmax(torch.Tensor([1,0])))): fp += 1
   print(hits/(len(testing_data)*10))
-  #tp_e.append(tp/(len(testing_data)*10))
-  #fp_e.append(fp/(len(testing_data)*10))
   acc_e.append(hits/(len(testing_data)*10))
   loss_e.append((total_loss/(len(testing_data))))
         
@@ -100,21 +94,23 @@ def train(epoch):
   #fp_t.append(fp/(len(testing_data)*1000))
   #acc_t.append(hits/(len(testing_data)*1000))
   #loss_t.append((total_loss/(len(testing_data))))
-  scheduler.step()
+  #scheduler.step()
   
-training_data = get_train_dataset("../data/train_fin_sorted.txt", "../data/train_inf_sorted.txt", 256)
-testing_data = get_train_dataset("../data/test_fin_sorted.txt", "../data/test_inf_sorted.txt", 10)
+training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 256)
+testing_data = get_train_dataset("../data/test_fin_noise_5_sorted.txt", "../data/test_inf_noise_5_sorted.txt", 10)
 netz = Netz()
 
 netz = netz.cuda()
 
 optimizer = optim.Adam(netz.parameters(), lr = 0.001)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
+#scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.2)
 
 for epoch in range(100):
   print("epoch:", epoch+1)
   train(epoch)
   test()
+
+torch.save(netz, 'conv_netz.py')
 """
 plt.plot(loss_t)
 plt.ylabel('loss')

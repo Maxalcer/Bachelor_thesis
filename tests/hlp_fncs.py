@@ -36,6 +36,15 @@ def check_inf_sites(m):
 
   return True
 
+def check_inf_sites_list(data_inf, data_fin):
+  count = 0
+  for inf, fin in zip(data_inf, data_fin):
+    if(check_inf_sites(inf)): count += 1
+    if(not check_inf_sites(fin)): count += 1
+  return count/(len(data_fin)*2)
+
+
+
 def read_data_tens(input):
 
   data = []
@@ -82,10 +91,12 @@ def sort_matrix(mat):
   return mat
 
 def noise_matrix(mat, alpha, beta):
+  np.random.seed()
+  noise_mat = mat.copy()
   for i in range(np.shape(mat)[0]):
     for j in range(np.shape(mat)[1]):
       if mat[i,j] == 0:
-        if rand.random() < alpha: mat[i,j] = 1
+        if np.random.random() < alpha: noise_mat[i,j] = 1
       else:
-        if rand.random() < beta: mat[i,j] = 0
-  return mat
+        if np.random.random() < beta: noise_mat[i,j] = 0
+  return noise_mat
