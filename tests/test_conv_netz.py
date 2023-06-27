@@ -12,7 +12,7 @@ import torch.optim as optim
 class Netz(nn.Module):
   def __init__(self):
     super(Netz, self).__init__()
-    #self.drpout = nn.Dropout(0.1)
+    self.avgpool = nn.AdaptiveAvgPool2d(10)
     self.conv1 = nn.Conv2d(1, 10, kernel_size=3, stride=1, padding=1)
     self.conv2 = nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1)
     self.conv3 = nn.Conv2d(20, 30, kernel_size=3, stride=1, padding=1)    
@@ -21,7 +21,7 @@ class Netz(nn.Module):
 
 
   def forward(self, x):
-    #x = self.drpout(x)
+    x = self.avgpool(x)
     x = F.max_pool2d(self.conv1(x), 2, 2)
     x = F.relu(x)
     x = F.max_pool2d(self.conv2(x), 2, 2)
@@ -105,7 +105,7 @@ netz = netz.cuda()
 optimizer = optim.Adam(netz.parameters(), lr = 0.001)
 #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.2)
 
-for epoch in range(100):
+for epoch in range(2):
   print("epoch:", epoch+1)
   train(epoch)
   test()
