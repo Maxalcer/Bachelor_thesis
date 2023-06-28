@@ -8,11 +8,11 @@ from torch.autograd import Variable
 class Netz(nn.Module):
   def __init__(self):
     super(Netz, self).__init__()
-    self.conv1 = nn.Conv2d(1, 10, kernel_size=3, stride=1, padding=1)
-    self.conv2 = nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1)
-    self.conv3 = nn.Conv2d(20, 30, kernel_size=3, stride=1, padding=1)    
-    self.lin1 = nn.Linear(30, 16)
-    self.lin2 = nn.Linear(16, 1)
+    self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1)
+    self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
+    self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)    
+    self.lin1 = nn.Linear(64, 32)
+    self.lin2 = nn.Linear(32, 1)
 
   def forward(self, x):
     x = F.max_pool2d(self.conv1(x), 2, 2)
@@ -21,7 +21,7 @@ class Netz(nn.Module):
     x = F.relu(x)
     x = F.max_pool2d(self.conv3(x), 2, 2)
     x = F.relu(x)
-    x = x.view(-1, 30)    
+    x = x.view(-1, 64)    
     x = F.relu(self.lin1(x))
     x = F.relu(self.lin2(x))
     return F.sigmoid(x)

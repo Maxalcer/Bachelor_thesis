@@ -20,7 +20,7 @@ def get_train_dataset(fin_file, inf_file, batch_size):
   train_inf = []
 
   for matrix in data_inf:
-    train_inf.append((matrix, torch.Tensor([1,0])))
+    train_inf.append((matrix, torch.Tensor([1])))
 
   del data_inf
 
@@ -29,7 +29,7 @@ def get_train_dataset(fin_file, inf_file, batch_size):
   train_fin = []
 
   for matrix in data_fin:
-    train_fin.append((matrix, torch.Tensor([0,1])))
+    train_fin.append((matrix, torch.Tensor([0])))
 
   del data_fin
 
