@@ -21,14 +21,13 @@ test_loss = []
 
 for epoch in range(100):
   print("epoch:", epoch+1)
-  train(netz, training_data, optimizer)
-  test(netz, testing_data)
-"""
+  tr_acc, tr_loss = train(netz, training_data, optimizer)
+  te_acc, te_loss = test(netz, testing_data)
   train_acc.append(tr_acc)
   train_loss.append(tr_loss)
   test_acc.append(te_acc)
   test_loss.append(te_loss)
-"""
+
 torch.save(netz, 'saved_fc_netz.py')
 
 plt.plot(train_acc, label = "Training Accuracy")

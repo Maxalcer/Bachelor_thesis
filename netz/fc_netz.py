@@ -39,7 +39,7 @@ def train(netz, training_data, optimizer):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-  print("train:", (total_acc/len(training_data)), (total_loss/len(training_data)))
+  return (total_acc/len(training_data)), (total_loss/len(training_data))
   
   
 def test(netz, testing_data):
@@ -54,4 +54,4 @@ def test(netz, testing_data):
     loss = criterion(output, target)
     total_loss += loss.item()
     total_acc += accuracy(output, target)
-  print("testing:", (total_acc/len(testing_data)), (total_loss/len(testing_data)))
+  return (total_acc/len(testing_data)), (total_loss/len(testing_data))
