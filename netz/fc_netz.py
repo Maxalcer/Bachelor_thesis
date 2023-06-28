@@ -27,27 +27,31 @@ class FC_Netz(nn.Module):
 def train(netz, training_data, optimizer):
   netz.train()
   total_loss = 0
-  hits = 0
+  total_acc = 0
   for input, target in training_data:
     input = Variable(input).cuda()
     output = netz(input)
     target = Variable(target).cuda()
     criterion = nn.BCELoss()
     loss = criterion(output, target)
-    total_loss = total_loss + loss.item()
+    total_loss += loss.item()
+    total_acc += accuracy(output, target)
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-  print("loss:", total_loss/len(training_data))
+  return (total_acc/len(training_data)), (total_acc/len(training_data))
+  
   
 def test(netz, testing_data):
   netz.eval()
-  hits = 0
+  total_loss = 0
+  total_acc = 0
   for input, target in testing_data:
     input = Variable(input).cuda()
     output = netz(input)
     target = target.cuda()
-    for i in range(10):
-      if(torch.round(output[i]) == target[i]): hits += 1
-  print(hits/(len(testing_data)*10))
-  return (hits/(len(testing_data)*10))
+    criterion = nn.BCELoss()
+    loss = criterion(output, target)
+    total_loss += loss.item()
+    total_acc += accuracy(output, target)
+  return (total_acc/len(testing_data)), (total_acc/len(testing_data))

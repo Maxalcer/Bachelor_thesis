@@ -83,3 +83,6 @@ def noise_matrix(mat, alpha, beta):
       else:
         if np.random.random() < beta: noise_mat[i,j] = 0
   return noise_mat
+
+def accuracy(output, target):
+  return float(sum(torch.round(output) == target)/output.size()[0])
