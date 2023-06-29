@@ -5,8 +5,8 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 
   
-training_data = get_train_dataset("../data/train_join_noise.txt", "../data/train_inf_noise.txt", 256)
-testing_data = get_train_dataset("../data/test_join_noise_15.txt", "../data/test_inf_noise_15.txt", 10)
+training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 256)
+testing_data = get_train_dataset("../data/test_fin_noise_15_sorted.txt", "../data/test_inf_noise_15_sorted.txt", 10)
 
 netz = FC_Netz()
 
@@ -28,7 +28,7 @@ for epoch in range(100):
   test_acc.append(te_acc)
   test_loss.append(te_loss)
 
-torch.save(netz, 'saved_netz_join.py')
+torch.save(netz, 'saved_fc_netz.py')
 
 plt.plot(train_acc, label = "Training Accuracy")
 plt.plot(test_acc, label = "Testing Accuracy")
@@ -37,5 +37,5 @@ plt.plot(test_loss, label = "Testing Loss")
 plt.xlabel('Epoch')
 plt.title('Learning Curves')
 plt.legend()
-plt.savefig('../results/Learning_Curves_Join.png')
+plt.savefig('../results/Learning_Curves.png')
 plt.show()
