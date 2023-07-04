@@ -1,27 +1,18 @@
 import numpy as np
 import torch
-import random as rand
-import torch.nn as nn
 
 def read_data_mat(input):
-
   data = []
-
   file = open(input, "r")
-
   content = file.read()
-
   matrices = content.split('\n\n')
-
   for m in matrices:
     rows = m.split('\n')
     matrix = [list(map(int, list(row))) for row in rows]    
     data.append(np.array(matrix))
-
   return data
 
 def check_inf_sites(m):
-
   for i in range(np.shape(m)[1]):
     for j in range(i+1, np.shape(m)[1]):
       col1 = m[:,i]
@@ -33,7 +24,6 @@ def check_inf_sites(m):
       found_same = (len(list(set(indices1) & set(indices2))) != 0)
 
       if found_diff & found_same: return False
-
   return True
 
 def check_inf_sites_list(data_inf, data_fin):
@@ -43,23 +33,16 @@ def check_inf_sites_list(data_inf, data_fin):
     if(not check_inf_sites(fin)): count += 1
   return count/(len(data_fin)*2)
 
-
-
 def read_data_tens(input):
 
   data = []
-
   file = open(input, "r")
-
   content = file.read()
-
   matrices = content.split('\n\n')
-
   for m in matrices:
     rows = m.split('\n')
     matrix = [list(map(float, list(row))) for row in rows]    
     data.append(torch.Tensor(matrix))
-
   return data
 
 def write_data(path, data):
@@ -100,3 +83,6 @@ def noise_matrix(mat, alpha, beta):
       else:
         if np.random.random() < beta: noise_mat[i,j] = 0
   return noise_mat
+
+def accuracy(output, target):
+  return float(sum(torch.round(output) == target)/output.size()[0])
