@@ -11,7 +11,7 @@ netz = Netz()
 
 netz = netz.cuda()
 
-optimizer = optim.Adam(netz.parameters(), lr = 0.001)
+optimizer = optim.Adam(netz.parameters(), lr = 0.00001)
 
 train_acc = []
 train_loss = []

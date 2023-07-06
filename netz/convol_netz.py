@@ -56,6 +56,7 @@ def train(netz, training_data, optimizer):
     input = input.transpose(0, 1)
     input = Variable(input)
     output = netz(input)
+    print(output, target)
     target = Variable(target).cuda()
     criterion = nn.BCELoss()
     loss = criterion(output, target)
