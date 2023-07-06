@@ -17,10 +17,11 @@ class Netz(nn.Module):
     self.conv2 = nn.Conv2d(10, 20, kernel_size=3, stride=1, padding=1)
     self.conv3 = nn.Conv2d(20, 30, kernel_size=3, stride=1, padding=1)    
     self.lin1 = nn.Linear(30, 16)
-    self.lin2 = nn.Linear(16,2)
+    self.lin2 = nn.Linear(16,1)
 
 
   def forward(self, x):
+    print(x.size())
     x = self.avgpool(x)
     x = F.max_pool2d(self.conv1(x), 2, 2)
     x = F.relu(x)
@@ -96,7 +97,7 @@ def train(epoch):
   #loss_t.append((total_loss/(len(testing_data))))
   #scheduler.step()
   
-training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 256)
+training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 64)
 testing_data = get_train_dataset("../data/test_fin_noise_5_sorted.txt", "../data/test_inf_noise_5_sorted.txt", 10)
 netz = Netz()
 

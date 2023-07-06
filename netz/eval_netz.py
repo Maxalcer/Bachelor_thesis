@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable 
 
-netz = torch.load('saved_netz.py')
+netz = torch.load('saved_conv_netz.py')
 netzfc = torch.load('saved_fc_netz.py')
 # netzwon = torch.load('saved_fc_netz_won.py')
 # netzfc = torch.load('saved_fc_netz_join.py')
