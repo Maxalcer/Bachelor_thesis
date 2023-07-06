@@ -26,7 +26,7 @@ class Netz(nn.Module):
     x = x.view(-1, 64)    
     x = F.relu(self.lin1(x))
     x = F.relu(self.lin2(x))
-    return F.sigmoid(x)
+    return x
 
 def test(netz, testing_data):
   netz.eval()
