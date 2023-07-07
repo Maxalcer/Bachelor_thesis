@@ -24,7 +24,7 @@ def test_var_noise():
   hits_algo = 0
   for input, target in testing_data:
     input = torch.tensor(noise_matrix(np.array(input[0]), a, b))
-    input = torch.tensor(sort_cluster(np.array(input[0])))
+    input = torch.tensor(sort_cluster(np.array(input)))
     algo_erg = check_inf_sites(np.array(input))
     if (algo_erg == int(target[0])): hits_algo += 1
     expanded_input = torch.unsqueeze(input, 0)
