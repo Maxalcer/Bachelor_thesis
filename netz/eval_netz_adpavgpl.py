@@ -4,6 +4,7 @@ from convol_netz import *
 from fc_netz import *
 import matplotlib.pyplot as plt
 import torch
+import torch.nn as nn
 from torch.autograd import Variable 
 
 netz = torch.load('saved_conv_netz.py')
@@ -14,7 +15,7 @@ netzfc = torch.load('saved_fc_netz.py')
 netz = netz.cpu()
 netzfc = netzfc.cpu() 
 #netzwon = netzwon.cpu()
-
+avgpool = nn.AdaptiveAvgPool2d(10)
 def test_var_noise():
   netz.eval()
   netzfc.eval()
@@ -27,6 +28,8 @@ def test_var_noise():
     input = torch.tensor(sort_matrix(np.array(input)))
     algo_erg = check_inf_sites(np.array(input))
     if (algo_erg == int(target[0])): hits_algo += 1
+    input = avgpool(input.repeat(1,1,1))
+    input = input[0]
     expanded_input = torch.unsqueeze(input, 0)
     expanded_input = expanded_input.repeat(1,1,1,1)
     expanded_input = expanded_input.transpose(0, 1)
@@ -49,8 +52,8 @@ noise = []
 
 b = 0
 
-testing_data = get_train_dataset("../data/test_fin.txt", "../data/test_inf.txt", 1)
-while (b <= 0.5):
+testing_data = get_train_dataset("../data/test_fin_12x12.txt", "../data/test_inf_12x12.txt", 1)
+while (b < 0.51):
   print(b)
   if(b == 0): a = 0
   else: a = 10**(-5)
@@ -61,7 +64,7 @@ while (b <= 0.5):
   #acc_won.append(won)
   acc_algo.append(algo)
   noise.append(b*100)
-  b = round(b + 0.001, 3)
+  b += 0.01
 
 
 plt.plot(noise, acc, label = "CNN")
@@ -72,6 +75,6 @@ plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/Accuracy_Noise.png')
+plt.savefig('../results/Accuracy_Noise_12x12.png')
 plt.show()
 
