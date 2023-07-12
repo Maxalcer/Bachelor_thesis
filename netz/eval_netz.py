@@ -7,14 +7,9 @@ import torch
 from torch.autograd import Variable 
 
 #netz = torch.load('saved_conv_netz.py')
-netzfc = torch.load('saved_fc_netz.py')
+netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
 # netzwon = torch.load('saved_fc_netz_won.py')
-netzbig = torch.load('saved_fc_netz_12x12.py')
-
-#netz = netz.cpu()
-netzfc = netzfc.cpu()
-netzbig = netzbig.cpu()
-#netzwon = netzwon.cpu()
+netzbig = torch.load('saved_fc_netz_12x12.py', map_location=torch.device('cpu'))
 
 def test_var_noise():
   #netz.eval()
