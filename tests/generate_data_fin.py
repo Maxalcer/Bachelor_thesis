@@ -30,7 +30,7 @@ c = 0
 
 # new_row = [a ^ b for a, b in zip(matrix[row], matrix[row+10])]
 
-for i in range(1000):
+for i in range(500000):
   if(i % 5000 == 0): print(i/5000, "%")
   n = np.random.choice(range(1,4), 1, p=probs)
   n = n[0]
@@ -63,7 +63,7 @@ for i in range(1000):
   train_data.append(matrix)
   orig_data.append(temp_data)
 
-write_data("../data/test_fin_12x12.txt", train_data)
+write_data("../data/train_fin_12x12.txt", train_data)
 
 with open("../data/train_original_fin_12x12.txt", "w") as file:
   for mat, seeds, n in orig_data:
