@@ -1,6 +1,6 @@
 from hlp_fncs import *
 from get_dataset import *
-from fc_netz import *
+from fc_netz_12x12 import *
 import torch.optim as optim
 import matplotlib.pyplot as plt
 
