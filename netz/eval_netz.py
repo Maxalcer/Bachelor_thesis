@@ -21,10 +21,10 @@ def test_var_noise():
   #hits_won = 0
   hits_algo = 0
   for (input, target), (input_big, target_big) in zip(testing_data, testing_data_big):
-    input = torch.tensor(noise_matrix(np.array(input[0]), a, b))
-    input = torch.tensor(sort_matrix(np.array(input)))
-    input_big = torch.tensor(noise_matrix(np.array(input_big[0]), a, b))
-    input_big = torch.tensor(sort_matrix(np.array(input_big)))
+    input = torch.tensor(noise_matrix(np.array(input[0]), a, b)).unsqueeze(0)
+    input = sort_tensor(input)
+    input_big = torch.tensor(noise_matrix(np.array(input_big[0]), a, b)).unsqueeze(0)
+    input_big = sort_matrix(input_big)
     algo_erg = check_inf_sites(np.array(input))
     if (algo_erg == int(target[0])): hits_algo += 1
     """
@@ -40,7 +40,7 @@ def test_var_noise():
     target = Variable(target)
     #if(torch.round(output) == target): hits += 1
     if(torch.round(output_fc) == target): hits_fc += 1
-    if(torch.round(output_big) == target_big): hits_fc += 1
+    if(torch.round(output_big) == target_big): hits_big += 1
     #if(torch.round(output_won) == target): hits_won += 1
   return (hits_big/len(testing_data)), (hits_fc/len(testing_data)), (hits_algo/len(testing_data))
   #return (hits_fc/len(testing_data))
