@@ -5,8 +5,8 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 
   
-training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 256)
-testing_data = get_train_dataset("../data/test_fin_noise_5_sorted.txt", "../data/test_inf_noise_5_sorted.txt", 10)
+training_data = get_train_dataset("../data/train_fin_12x12_noise_sorted.txt", "../data/train_inf_12x12_noise_sorted.txt", 256)
+testing_data = get_train_dataset("../data/test_fin_12x12_noise_5_sorted.txt", "../data/test_inf_12x12_noise_5_sorted.txt", 10)
 
 netz = FC_Netz()
 
@@ -28,7 +28,7 @@ for epoch in range(100):
   test_acc.append(te_acc)
   test_loss.append(te_loss)
 
-torch.save(netz, 'saved_fc_netz.py')
+torch.save(netz, 'saved_fc_netz_12x12.py')
 
 plt.plot(train_acc, label = "Training Accuracy")
 plt.plot(test_acc, label = "Testing Accuracy")
