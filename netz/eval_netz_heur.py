@@ -26,6 +26,7 @@ def test_var_noise():
     loops = comb(input.size()[0], 3)*comb(input.size()[1], 2)
     output = 1
     for i in range(loops):
+      np.random.seed()
       rows = np.random.choice(range(12), 10, replace=False)
       cols = np.random.choice(range(12), 10, replace=False)
       np.sort(rows)

@@ -67,6 +67,7 @@ def sort_tensor(batched_tens):
     int_tens = torch.Tensor([convert(batched_tens[i][:,j]) for j in range(batched_tens[i].size()[1])])
     int_tens, indices = torch.sort(int_tens, descending=False)
     batched_tens[i] = batched_tens[i][:, indices]
+  return batched_tens
 
 def sort_matrix(mat):
   int_cols = [convert(mat[:,j]) for j in range(np.shape(mat)[1])]
