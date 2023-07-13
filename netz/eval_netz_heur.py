@@ -64,6 +64,6 @@ plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/Accuracy_Noise_12x12.png')
+plt.savefig('../results/Accuracy_Noise_Heur.png')
 plt.show()
 
