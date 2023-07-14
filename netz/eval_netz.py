@@ -22,7 +22,7 @@ def test_var_noise():
   hits_algo = 0
   for input, target in testing_data:
     input = torch.tensor(noise_matrix(np.array(input[0]), a, b)).unsqueeze(0)
-    input = sort_tensor(input)
+    input_sort = sort_tensor(input)
     algo_erg = check_inf_sites(np.array(input[0]))
     if (algo_erg == int(target[0])): hits_algo += 1
     """
@@ -32,7 +32,7 @@ def test_var_noise():
     expanded_input = Variable(expanded_input)
     """
     # output = netz(expanded_input)
-    output_fc = netzfc(input)
+    output_fc = netzfc(input_sort)
     output_uns = netzuns(input)
     #output_won = netzwon(input)
     target = Variable(target)
@@ -61,12 +61,12 @@ while (b <= 0.5):
   uns, fc, algo = test_var_noise()
   #fc = test_var_noise()
   #acc.append(net)
-  acc_fc.append(fc)
-  acc_uns.append(uns)
+  acc_fc.append(round(fc, 4))
+  acc_uns.append(round(uns, 4))
   #acc_won.append(won)
-  acc_algo.append(algo)
+  acc_algo.append(round(algo, 4))
   noise.append(b*100)
-  b = round(b + 0.001, 3)
+  b = round(b + 0.005, 3)
 
 
 #plt.plot(noise, acc, label = "CNN")
