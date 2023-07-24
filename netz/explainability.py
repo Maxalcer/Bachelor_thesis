@@ -17,48 +17,55 @@ def check_inf_sites_arg(m):
       found_same = (len(list(set(indices1) & set(indices2))) != 0)
 
       if found_diff & found_same: return [i, j], (list(set(indices1) - set(indices2)) + list(set(indices2) - set(indices1)) + list(set(indices1) & set(indices2)))
-  return []
+  return list(), list()
 
-netzfc = torch.load('saved_fc_netz_won.py')
+netzfc = torch.load('saved_fc_netz_won.py', map_location=torch.device('cpu'))
 data = read_data_tens("../data/test_fin_sorted.txt")
-#data_noise = read_data_tens("../data/test_fin_noise_15_sorted.txt")
-netzfc = netzfc.cpu() 
+#data = read_data_tens("../data/test_fin_noise_15_sorted.txt")
 netzfc.eval()
-ig = IntegratedGradients(netzfc)
+#ig = IntegratedGradients(netzfc)
 occ = Occlusion(netzfc)
-mat = data[2].unsqueeze(0)
-#mat_noise = data_noise[2].unsqueeze(0)
-#attr_ig = ig.attribute(mat, target=0, n_steps=100)
-attr_occ = occ.attribute(mat, sliding_window_shapes=(1,1))
-#attr_occ_noise = occ.attribute(mat_noise, sliding_window_shapes=(1,1))
-alg = np.zeros((10,10))
-cols, rows = check_inf_sites_arg(mat[0])
-for col in cols:
-  for row in rows:
-    alg[row, col] = -1
+class_net = []
+attr_occ = []
+class_alg = []
+alg = []
+i = 0
+while i < 10:
+  mat = data[i+10].unsqueeze(0)
+  class_net.append(int(torch.round(netzfc(mat))[0]))
+  attr_occ.append(occ.attribute(mat, sliding_window_shapes=(1,1)))
+  class_alg.append(check_inf_sites(mat[0]))
+  a = np.zeros((10,10))
+  cols, rows = check_inf_sites_arg(mat[0])
+  for col in cols:
+    for row in rows:
+      a[row, col] = -1
+  alg.append(a)
+  i += 1
 
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(15,5))
-heatmap_net = axs[0].imshow(np.array(attr_occ[0]), cmap='hot', interpolation='nearest')
-cbar_net = plt.colorbar(heatmap_net, ax=axs[0])
-axs[0].set_title("Network")
-heatmap_alg = axs[1].imshow(alg, cmap='hot', interpolation='nearest')
-cbar_alg = plt.colorbar(heatmap_alg, ax=axs[1])
-axs[1].set_title("Algorithm")
-mat = np.array(mat[0])
-for i in range(mat.shape[0]):
-    for j in range(mat.shape[1]):
-        text_color1 = 'white' if np.array(attr_occ[0])[i, j] < (-0.6) else 'black'
-        text_color2 = 'white' if alg[i, j] == (-1) else 'black'
-        text1 = axs[0].text(j, i, int(mat[i,j]), ha='center', va='center', color=text_color1)
-        text2 = axs[1].text(j, i, int(mat[i,j]), ha='center', va='center', color=text_color2)
+heatmaps = []
+cbars = []
+fig, axs = plt.subplots(nrows=5, ncols=4, figsize =(60, 50))
 
-"""
-plt.subplot(1, 3, 2)
-plt.imshow(np.array(attr_occ_noise[0]), cmap='hot', interpolation='nearest')
-plt.colorbar()
-plt.title("Network Noise")
-"""
+inx = 0
+for k in range(5):
+  for l in range(2):
+    heatmaps.append(axs[k, l*2].imshow(np.array(attr_occ[inx][0]), cmap='summer', interpolation='nearest'))
+    cbars.append(plt.colorbar(heatmaps[-1], ax=axs[k, l*2]))
+    axs[k, l*2].set_title(str(class_net[inx]))
+    heatmaps.append(axs[k, l*2+1].imshow(alg[inx], cmap='gray', interpolation='nearest'))
+    cbars.append(plt.colorbar(heatmaps[-1], ax=axs[k, l*2+1]))
+    axs[k, l*2+1].set_title(str(class_alg[inx]))
+    mat = data[inx+10]
+    for i in range(mat.shape[0]):
+        for j in range(mat.shape[1]):
+            #text_color1 = 'white' if np.array(attr_occ[inx][0])[i, j] < (-0.6) else 'black'
+            text_color2 = 'white' if alg[inx][i, j] == (-1) else 'black'
+            text1 = axs[k, l*2].text(j, i, int(mat[i,j]), ha='center', va='center', color='black')
+            text2 = axs[k, l*2+1].text(j, i, int(mat[i,j]), ha='center', va='center', color=text_color2)
+    inx += 1
+
 
 plt.tight_layout()
-plt.savefig('../results/heatmap_won.png')
+plt.savefig('../results/heatmaps2_won.png')
 plt.show()

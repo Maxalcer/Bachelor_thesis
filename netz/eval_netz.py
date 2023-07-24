@@ -9,15 +9,19 @@ from torch.autograd import Variable
 #netz = torch.load('saved_conv_netz.py')
 netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
 # netzwon = torch.load('saved_fc_netz_won.py')
-netzuns = torch.load('saved_fc_netz_unsorted.py', map_location=torch.device('cpu'))
+#netzuns = torch.load('saved_fc_netz_unsorted.py', map_location=torch.device('cpu'))
+
+def classify(input, cutoff):
+  if input > cutoff: return 1
+  else: return 0
 
 def test_var_noise():
   #netz.eval()
   netzfc.eval()
-  netzuns.eval()
+  #netzuns.eval()
   #hits = 0
   hits_fc = 0
-  hits_uns = 0
+  hits_ctoff = 0
   #hits_won = 0
   hits_algo = 0
   for input, target in testing_data:
@@ -33,19 +37,18 @@ def test_var_noise():
     """
     # output = netz(expanded_input)
     output_fc = netzfc(input_sort)
-    output_uns = netzuns(input)
     #output_won = netzwon(input)
     target = Variable(target)
     #if(torch.round(output) == target): hits += 1
-    if(torch.round(output_fc) == target): hits_fc += 1
-    if(torch.round(output_uns) == target): hits_uns += 1
+    if(classify(output_fc, 0.5) == target): hits_fc += 1
+    if(classify(output_fc, 0.4) == target): hits_ctoff += 1
     #if(torch.round(output_won) == target): hits_won += 1
-  return (hits_uns/len(testing_data)), (hits_fc/len(testing_data)), (hits_algo/len(testing_data))
+  return (hits_ctoff/len(testing_data)), (hits_fc/len(testing_data)), (hits_algo/len(testing_data))
   #return (hits_fc/len(testing_data))
 
 #acc = []
 acc_fc = []
-acc_uns = []
+acc_ctoff = []
 #acc_won = []
 acc_algo = []
 noise = []
@@ -58,26 +61,26 @@ while (b <= 0.5):
   print(b)
   if(b == 0): a = 0
   else: a = 10**(-5)
-  uns, fc, algo = test_var_noise()
+  ctoff, fc, algo = test_var_noise()
   #fc = test_var_noise()
   #acc.append(net)
-  acc_fc.append(round(fc, 4))
-  acc_uns.append(round(uns, 4))
+  acc_fc.append(round(fc, 3))
+  acc_ctoff.append(round(ctoff, 3))
   #acc_won.append(won)
-  acc_algo.append(round(algo, 4))
+  acc_algo.append(round(algo, 3))
   noise.append(b*100)
   b = round(b + 0.005, 3)
 
 
 #plt.plot(noise, acc, label = "CNN")
-plt.plot(noise, acc_uns, label = "FCNN")
-plt.plot(noise, acc_fc, label = "FCNN sorted")
+plt.plot(noise, acc_fc, label = "FCNN cutoff 0,5")
+plt.plot(noise, acc_ctoff, label = "FCNN cutoff 0,4")
 #plt.plot(noise, acc_won, label = "FCNN without Noise")
 plt.plot(noise, acc_algo, label = "Algorithm")
 plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/Accuracy_Noise_unsorted.png')
+plt.savefig('../results/Accuracy_Noise_cutoff.png')
 plt.show()
 
