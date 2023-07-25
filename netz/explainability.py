@@ -19,9 +19,9 @@ def check_inf_sites_arg(m):
       if found_diff & found_same: return [i, j], (list(set(indices1) - set(indices2)) + list(set(indices2) - set(indices1)) + list(set(indices1) & set(indices2)))
   return list(), list()
 
-netzfc = torch.load('saved_fc_netz_won.py', map_location=torch.device('cpu'))
-data = read_data_tens("../data/test_fin_sorted.txt")
-#data = read_data_tens("../data/test_fin_noise_15_sorted.txt")
+netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
+#data = read_data_tens("../data/test_fin_sorted.txt")
+data = read_data_tens("../data/test_inf_noise_15_sorted.txt")
 netzfc.eval()
 #ig = IntegratedGradients(netzfc)
 occ = Occlusion(netzfc)
@@ -31,7 +31,7 @@ class_alg = []
 alg = []
 i = 0
 while i < 10:
-  mat = data[i+10].unsqueeze(0)
+  mat = data[i+40].unsqueeze(0)
   class_net.append(int(torch.round(netzfc(mat))[0]))
   attr_occ.append(occ.attribute(mat, sliding_window_shapes=(1,1)))
   class_alg.append(check_inf_sites(mat[0]))
@@ -56,7 +56,7 @@ for k in range(5):
     heatmaps.append(axs[k, l*2+1].imshow(alg[inx], cmap='gray', interpolation='nearest'))
     cbars.append(plt.colorbar(heatmaps[-1], ax=axs[k, l*2+1]))
     axs[k, l*2+1].set_title(str(class_alg[inx]))
-    mat = data[inx+10]
+    mat = data[inx+40]
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):
             #text_color1 = 'white' if np.array(attr_occ[inx][0])[i, j] < (-0.6) else 'black'
@@ -67,5 +67,5 @@ for k in range(5):
 
 
 plt.tight_layout()
-plt.savefig('../results/heatmaps2_won.png')
+plt.savefig('../results/heatmaps5_inf.png')
 plt.show()
