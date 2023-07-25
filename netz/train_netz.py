@@ -5,8 +5,8 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 
   
-training_data = get_train_dataset("../data/train_fin_noise_sorted.txt", "../data/train_inf_noise_sorted.txt", 256)
-testing_data = get_train_dataset("../data/test_fin_noise_5_sorted.txt", "../data/test_inf_noise_5_sorted.txt", 10)
+training_data = get_train_dataset("../data/noise/sorted/train_fin_noise_sorted.txt", "../data/noise/sorted/train_inf_noise_sorted.txt", 256)
+testing_data = get_train_dataset("../data/noise/sorted/test_fin_noise_5_sorted.txt", "../data/noise/sorted/test_inf_noise_5_sorted.txt", 10)
 netz = Netz()
 
 netz = netz.cuda()
@@ -27,6 +27,8 @@ for epoch in range(100):
   test_acc.append(te_acc)
   test_loss.append(te_loss)
 
+np.savez('../results/learning_curves/Learning_Curves_CNN.npz', train_acc=train_acc, train_loss=train_loss, test_acc=test_acc, test_loss=test_loss)
+"""
 torch.save(netz, 'saved_conv_netz.py')
 
 plt.plot(train_acc, label = "Training Accuracy")
@@ -38,3 +40,4 @@ plt.title('Learning Curves')
 plt.legend()
 plt.savefig('../results/Learning_Curves_conv.png')
 plt.show()
+"""

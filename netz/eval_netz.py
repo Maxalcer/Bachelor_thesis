@@ -6,51 +6,44 @@ import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable 
 
-#netz = torch.load('saved_conv_netz.py')
+netzcnn = torch.load('saved_conv_netz.py', map_location=torch.device('cpu'))
 netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
 # netzwon = torch.load('saved_fc_netz_won.py')
-netzuns = torch.load('saved_fc_netz_unsorted.py', map_location=torch.device('cpu'))
+# netzuns = torch.load('saved_fc_netz_unsorted.py', map_location=torch.device('cpu'))
 
 def classify(input, cutoff):
   if input > cutoff: return 1
   else: return 0
 
 def test_var_noise():
-  #netz.eval()
   netzfc.eval()
-  netzuns.eval()
-  #hits = 0
+  netzcnn.eval()
   hits_fc = 0
-  hits_uns = 0
-  #hits_won = 0
+  hits_cnn = 0
   hits_algo = 0
   for input, target in testing_data:
     input = torch.tensor(noise_matrix(np.array(input[0]), a, b)).unsqueeze(0)
-    input_sort = sort_tensor(input)
+    input = sort_tensor(input)
     algo_erg = check_inf_sites(np.array(input[0]))
     if (algo_erg == int(target[0])): hits_algo += 1
-    """
     expanded_input = torch.unsqueeze(input, 0)
     expanded_input = expanded_input.repeat(1,1,1,1)
     expanded_input = expanded_input.transpose(0, 1)
     expanded_input = Variable(expanded_input)
-    """
-    # output = netz(expanded_input)
-    output_fc = netzfc(input_sort)
-    output_uns = netzuns(input)
+
+    output_fc = netzfc(input)
+    output_cnn = netzcnn(expanded_input)
     #output_won = netzwon(input)
     target = Variable(target)
     #if(torch.round(output) == target): hits += 1
     if(classify(output_fc, 0.5) == target): hits_fc += 1
-    if(classify(output_uns, 0.5) == target): hits_uns += 1
+    if(classify(output_cnn, 0.5) == target): hits_cnn += 1
     #if(torch.round(output_won) == target): hits_won += 1
-  return (hits_uns/len(testing_data)), (hits_fc/len(testing_data)), (hits_algo/len(testing_data))
+  return (hits_cnn/len(testing_data)), (hits_fc/len(testing_data)), (hits_algo/len(testing_data))
   #return (hits_fc/len(testing_data))
 
-#acc = []
+acc_cnn = []
 acc_fc = []
-acc_uns = []
-#acc_won = []
 acc_algo = []
 noise = []
 
@@ -62,17 +55,17 @@ while (b <= 0.5):
   print(b)
   if(b == 0): a = 0
   else: a = 10**(-5)
-  uns, fc, algo = test_var_noise()
+  cnn, fc, algo = test_var_noise()
   #fc = test_var_noise()
   #acc.append(net)
   acc_fc.append(round(fc, 3))
-  acc_uns.append(round(uns, 3))
+  acc_cnn.append(round(cnn, 3))
   #acc_won.append(won)
   acc_algo.append(round(algo, 3))
   noise.append(b*100)
   b = round(b + 0.005, 3)
 
-np.savez('../results/evaluation/Accuracy_Noise_unsorted.npz', unsorted=acc_uns, sorted=acc_fc, noise=noise)
+np.savez('../results/evaluation/Accuracy_Noise_fc_cnn.npz', cnn=acc_cnn, fcnn=acc_fc, noise=noise)
 
 """
 #plt.plot(noise, acc, label = "CNN")
