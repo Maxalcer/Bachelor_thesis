@@ -1,0 +1,13 @@
+Gesamt: 100
+Positive (Kein Infinite Sites Bruch): 50
+Negative (Infinite Sites Bruch): 50
+TN Sinnvoll: 16
+TN Sinnlos: 15
+TN Unsicher: 2
+FP mit Bruch: 16
+FP onhe Bruch: 1
+TP mit Bruch: 30
+TP ohne Bruch: 17
+FN mit Bruch (Sinnvoll): 1
+FN mit Bruch (Sinnlos): 1
+FN ohne Bruch: 1
