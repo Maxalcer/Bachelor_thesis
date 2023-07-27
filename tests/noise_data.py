@@ -1,9 +1,9 @@
 from hlp_fncs import *
 import numpy as np
 alpha = 10**(-5)
-"""
-train_data_fin = read_data_mat("../data/train_fin_12x12.txt")
-train_data_inf = read_data_mat("../data/train_inf_12x12.txt")
+
+train_data_fin = read_data_mat("../data/douplets/no_noise/unsorted/train_douplets_fin.txt")
+train_data_inf = read_data_mat("../data/douplets/no_noise/unsorted/train_douplets_inf.txt")
 
 beta = 0.05
 
@@ -17,34 +17,34 @@ if (len(train_data_fin) == len(train_data_fin)):
     train_data_fin[i] = noise_matrix(train_data_fin[i], alpha, beta)
     beta += beta_step
 
-  write_data("../data/train_fin_12x12_noise.txt", train_data_fin)
-  write_data("../data/train_inf_12x12_noise.txt", train_data_inf)
+  write_data("../data/douplets/noise/unsorted/train_douplets_fin_noise.txt", train_data_fin)
+  write_data("../data/douplets/noise/unsorted/train_douplets_inf_noise.txt", train_data_inf)
 
 del train_data_inf, train_data_fin
-"""
-test_data_inf = read_data_mat("../data/test_inf_12x12.txt")
-test_data_fin = read_data_mat("../data/test_fin_12x12.txt")
+
+test_data_inf = read_data_mat("../data/douplets/no_noise/unsorted/test_douplets_1_inf.txt")
+test_data_fin = read_data_mat("../data/douplets/no_noise/unsorted/test_douplets_1_fin.txt")
 
 if (len(test_data_fin) == len(test_data_fin)):
 
   test_noise_5_inf = []
   test_noise_5_fin = []
-  test_noise_15_inf = []
-  test_noise_15_fin = []
-  test_noise_25_inf = []
-  test_noise_25_fin = []
+  #test_noise_15_inf = []
+  #test_noise_15_fin = []
+  #test_noise_25_inf = []
+  #test_noise_25_fin = []
 
   for fin, inf in zip(test_data_fin, test_data_inf):
     test_noise_5_inf.append(noise_matrix(inf, alpha, 0.05))
     test_noise_5_fin.append(noise_matrix(fin, alpha, 0.05))
-    test_noise_15_inf.append(noise_matrix(inf, alpha, 0.15))    
-    test_noise_15_fin.append(noise_matrix(fin, alpha, 0.15))
-    test_noise_25_inf.append(noise_matrix(inf, alpha, 0.25))
-    test_noise_25_fin.append(noise_matrix(fin, alpha, 0.25))
+    #test_noise_15_inf.append(noise_matrix(inf, alpha, 0.15))    
+    #test_noise_15_fin.append(noise_matrix(fin, alpha, 0.15))
+    #test_noise_25_inf.append(noise_matrix(inf, alpha, 0.25))
+    #test_noise_25_fin.append(noise_matrix(fin, alpha, 0.25))
 
-  write_data("../data/test_fin_12x12_noise_5.txt", test_noise_5_fin)
-  write_data("../data/test_inf_12x12_noise_5.txt", test_noise_5_inf)
-  write_data("../data/test_fin_12x12_noise_15.txt", test_noise_15_fin)
-  write_data("../data/test_inf_12x12_noise_15.txt", test_noise_15_inf)
-  write_data("../data/test_fin_12x12_noise_25.txt", test_noise_25_fin)
-  write_data("../data/test_inf_12x12_noise_25.txt", test_noise_25_inf)
+  write_data("../data/douplets/noise/unsorted/test_douplets_1_fin_noise_5.txt", test_noise_5_fin)
+  write_data("../data/douplets/noise/unsorted/test_douplets_1_inf_noise_5.txt", test_noise_5_inf)
+  #write_data("../data/test_fin_12x12_noise_15.txt", test_noise_15_fin)
+  #write_data("../data/test_inf_12x12_noise_15.txt", test_noise_15_inf)
+  #write_data("../data/test_fin_12x12_noise_25.txt", test_noise_25_fin)
+  #write_data("../data/test_inf_12x12_noise_25.txt", test_noise_25_inf)
