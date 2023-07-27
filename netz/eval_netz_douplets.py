@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable 
 
-netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
+netzfc = torch.load('saved_fc_netz_douplets.py', map_location=torch.device('cpu'))
 
 def classify(input, cutoff):
   if input > cutoff: return 1
@@ -67,9 +67,9 @@ while (b <= 0.5):
   acc_2.append(round(a2, 3))
   acc_3.append(round(a3, 3))
   noise.append(b*100)
-  b = round(b + 0.005, 3)
+  b = round(b + 0.02, 3)
 
-np.savez('../results/evaluation/Accuracy_Noise_FCNN_douplets.npz', acc_0=acc_0, acc_1=acc_1, acc_2=acc_2, acc_3=acc_3, noise=noise)
+np.savez('../results/evaluation/Accuracy_Noise_douplets.npz', acc_0=acc_0, acc_1=acc_1, acc_2=acc_2, acc_3=acc_3, noise=noise)
 
 plt.plot(noise, acc_0, label = "0 douplets")
 plt.plot(noise, acc_1, label = "1 douplet")
@@ -79,6 +79,6 @@ plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/evaluation/Accuracy_Noise_FCNN_douplets.png')
+plt.savefig('../results/evaluation/Accuracy_Noise_douplets.png')
 plt.show()
 

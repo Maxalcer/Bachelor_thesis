@@ -63,20 +63,20 @@ while (b <= 0.5):
   #acc_won.append(won)
   acc_algo.append(round(algo, 3))
   noise.append(b*100)
-  b = round(b + 0.005, 3)
+  b = round(b + 0.02, 3)
 
 np.savez('../results/evaluation/Accuracy_Noise_fc_cnn.npz', cnn=acc_cnn, fcnn=acc_fc, noise=noise)
 
-"""
+
 #plt.plot(noise, acc, label = "CNN")
-plt.plot(noise, acc_fc, label = "FCNN sorted")
-plt.plot(noise, acc_uns, label = "FCNN unsorted")
+plt.plot(noise, acc_fc, label = "FCNN")
+plt.plot(noise, acc_cnn, label = "CNN")
 #plt.plot(noise, acc_won, label = "FCNN without Noise")
 plt.plot(noise, acc_algo, label = "Algorithm")
 plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/Accuracy_Noise_cutoff.png')
+plt.savefig('../results/Accuracy_Noise_cutoff_fc_cnn.png')
 plt.show()
-"""
+
