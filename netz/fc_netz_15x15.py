@@ -9,14 +9,14 @@ class FC_Netz(nn.Module):
   def __init__(self):
     super(FC_Netz, self).__init__()
     self.dropout = nn.Dropout(0.2)
-    self.lin1 = nn.Linear(12,12)
-    self.lin2 = nn.Linear(144,144)
-    self.lin3 = nn.Linear(144,144)
-    self.lin4 = nn.Linear(144,1)
+    self.lin1 = nn.Linear(15,15)
+    self.lin2 = nn.Linear(225,100)
+    self.lin3 = nn.Linear(100,100)
+    self.lin4 = nn.Linear(100,1)
 
   def forward(self, x):   
     x = F.relu(self.lin1(x))
-    x = x.view(-1,144)  
+    x = x.view(-1,225)  
     x = F.relu(self.lin2(x))
     x = self.dropout(x) 
     x = F.relu(self.lin3(x))
