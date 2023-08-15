@@ -6,7 +6,7 @@ import numpy as np
 from math import comb
 
 def generate_matrix(ncols):
-  process = subprocess.Popen([r'./ms', '25', '1', '-t', '5.0', '-s', str(ncols)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=r'/buffer/ag_bsc/pmsb_23/max_alcer/bachelorarbeit/msdir')
+  process = subprocess.Popen([r'./ms', '50', '1', '-t', '5.0', '-s', str(ncols)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=r'/buffer/ag_bsc/pmsb_23/max_alcer/bachelorarbeit/msdir')
   result = process.communicate()
   lines = result[0].split('\n')
   seeds = [int(i) for i in lines[1].split(' ')]
@@ -30,12 +30,12 @@ c = 0
 
 # new_row = [a ^ b for a, b in zip(matrix[row], matrix[row+10])]
 
-for i in range(500000):
+for i in range(1000):
   if(i % 5000 == 0): print(i/5000, "%")
   n = np.random.choice(range(1,4), 1, p=probs)
   n = n[0]
   
-  temp_data = generate_matrix(25+n)
+  temp_data = generate_matrix(10+n)
 
   temp_data += (n,)
 
@@ -44,28 +44,28 @@ for i in range(500000):
     
   while(check_inf_sites(matrix)):
     matrix = temp_data[0]
-    if break_inf_loop > comb(25, n):
-      temp_data = generate_matrix(25+n)
+    if break_inf_loop > comb(10, n):
+      temp_data = generate_matrix(10+n)
       temp_data += (n,)
       matrix = temp_data[0][:]
       break_inf_loop = 0
 
-    cols = np.random.choice(range(25), n, replace=False)
+    cols = np.random.choice(range(10), n, replace=False)
     j = 0
     for col in cols:
-      new_col = [a | b for a, b in zip(matrix[:,col], matrix[:,25+j])]
-      for k in range(25):
+      new_col = [a | b for a, b in zip(matrix[:,col], matrix[:,10+j])]
+      for k in range(10):
         matrix[k, col] = new_col[k]
       j += 1 
-    matrix = np.delete(matrix, range(25,np.shape(matrix)[1]), 1)
+    matrix = np.delete(matrix, range(10,np.shape(matrix)[1]), 1)
     break_inf_loop += 1
 
   train_data.append(matrix)
   orig_data.append(temp_data)
 
-write_data("../data/25x25/no_noise/train_fin_25x25.txt", train_data)
+write_data("../data/10x50/no_noise/test_fin_10x50.txt", train_data)
 
-with open("../data/original/train_original_fin_25x25.txt", "w") as file:
+with open("../data/original/test_original_fin_10x50.txt", "w") as file:
   for mat, seeds, n in orig_data:
     seedstr = [str(seed) for seed in seeds]
     file.write("seeds: "+ (' '.join(seedstr)) + "\n")

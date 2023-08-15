@@ -1,12 +1,12 @@
 from hlp_fncs import *
 from get_dataset import *
 from convol_netz import *
-from fc_netz import *
+from fc_netz_10x50 import *
 import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable 
 
-netzfc = torch.load('saved_fc_netz_douplets.py', map_location=torch.device('cpu'))
+netzfc = torch.load('saved_fc_netz_10x50_douplets.py', map_location=torch.device('cpu'))
 
 def classify(input, cutoff):
   if input > cutoff: return 1
@@ -53,10 +53,10 @@ noise = []
 
 b = 0
 
-testing_data0 = get_train_dataset("../data/no_noise/unsorted/test_fin.txt", "../data/no_noise/unsorted/test_inf.txt", 1)
-testing_data1 = get_train_dataset("../data/douplets/no_noise/unsorted/test_douplets_1_fin.txt", "../data/douplets/no_noise/unsorted/test_douplets_1_inf.txt", 1)
-testing_data2 = get_train_dataset("../data/douplets/no_noise/unsorted/test_douplets_2_fin.txt", "../data/douplets/no_noise/unsorted/test_douplets_2_inf.txt", 1)
-testing_data3 = get_train_dataset("../data/douplets/no_noise/unsorted/test_douplets_3_fin.txt", "../data/douplets/no_noise/unsorted/test_douplets_3_inf.txt", 1)
+testing_data0 = get_train_dataset("../data/10x50/no_noise/test_fin_10x50.txt", "../data/10x50/no_noise/test_inf_10x50.txt", 1)
+testing_data1 = get_train_dataset("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_1.txt", "../data/10x50/douplets/no_noise/test_inf_10x50_douplets_1.txt", 1)
+testing_data2 = get_train_dataset("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_2.txt", "../data/10x50/douplets/no_noise/test_inf_10x50_douplets_2.txt", 1)
+testing_data3 = get_train_dataset("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_3.txt", "../data/10x50/douplets/no_noise/test_inf_10x50_douplets_3.txt", 1)
 while (b <= 0.5):
   print(b)
   if(b == 0): a = 0
@@ -69,8 +69,8 @@ while (b <= 0.5):
   noise.append(b*100)
   b = round(b + 0.02, 3)
 
-np.savez('../results/evaluation/Accuracy_Noise_douplets.npz', acc_0=acc_0, acc_1=acc_1, acc_2=acc_2, acc_3=acc_3, noise=noise)
-
+np.savez('../results/evaluation/Accuracy_Noise_douplets_10x50.npz', acc_0=acc_0, acc_1=acc_1, acc_2=acc_2, acc_3=acc_3, noise=noise)
+"""
 plt.plot(noise, acc_0, label = "0 douplets")
 plt.plot(noise, acc_1, label = "1 douplet")
 plt.plot(noise, acc_2, label = "2 douplets")
@@ -79,6 +79,6 @@ plt.ylabel('Accuracy')
 plt.xlabel('Noise Level [%]')
 plt.title('Accuracy for different Noise Levels')
 plt.legend()
-plt.savefig('../results/evaluation/Accuracy_Noise_douplets.png')
+plt.savefig('../results/evaluation/Accuracy_Noise_douplets_10x50.png')
 plt.show()
-
+"""

@@ -1,6 +1,6 @@
 from hlp_fncs import *
 from get_dataset import *
-from fc_netz_25x25 import *
+from fc_netz_25x25_big import *
 import torch.optim as optim
 import matplotlib.pyplot as plt
 
@@ -28,9 +28,9 @@ for epoch in range(100):
   test_acc.append(te_acc)
   test_loss.append(te_loss)
 
-torch.save(netz, 'saved_fc_netz_25x25.py')
+torch.save(netz, 'saved_fc_netz_25x25_big.py')
 
-np.savez('../results/learning_curves/Learning_Curves_25x25.npz', train_acc=train_acc, train_loss=train_loss, test_acc=test_acc, test_loss=test_loss)
+np.savez('../results/learning_curves/Learning_Curves_25x25_big.npz', train_acc=train_acc, train_loss=train_loss, test_acc=test_acc, test_loss=test_loss)
 
 plt.plot(train_acc, label = "Training Accuracy")
 plt.plot(test_acc, label = "Testing Accuracy")
@@ -39,5 +39,5 @@ plt.plot(test_loss, label = "Testing Loss")
 plt.xlabel('Epoch')
 plt.title('Learning Curves')
 plt.legend()
-plt.savefig('../results/learning_curves/Learning_Curves_25x25.png')
+plt.savefig('../results/learning_curves/Learning_Curves_25x25_big.png')
 plt.show()

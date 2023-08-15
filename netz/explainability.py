@@ -2,7 +2,7 @@ from hlp_fncs import *
 from fc_netz import *
 import torch
 import numpy as np
-from captum.attr import IntegratedGradients, Occlusion
+from captum.attr import Occlusion
 import matplotlib.pyplot as plt
 
 def check_inf_sites_arg(m):
@@ -21,7 +21,7 @@ def check_inf_sites_arg(m):
 
 netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
 #data = read_data_tens("../data/test_fin_sorted.txt")
-data = read_data_tens("../data/test_inf_noise_15_sorted.txt")
+data = read_data_tens("../data/noise/sorted/test_inf_noise_15_sorted.txt")
 netzfc.eval()
 #ig = IntegratedGradients(netzfc)
 occ = Occlusion(netzfc)
@@ -31,10 +31,10 @@ class_alg = []
 alg = []
 i = 0
 while i < 10:
-  mat = data[i+40].unsqueeze(0)
+  mat = data[i].unsqueeze(0)
   class_net.append(int(torch.round(netzfc(mat))[0]))
   attr_occ.append(occ.attribute(mat, sliding_window_shapes=(1,1)))
-  class_alg.append(check_inf_sites(mat[0]))
+  class_alg.append(int(check_inf_sites(mat[0])))
   a = np.zeros((10,10))
   cols, rows = check_inf_sites_arg(mat[0])
   for col in cols:
@@ -50,22 +50,26 @@ fig, axs = plt.subplots(nrows=5, ncols=4, figsize =(60, 50))
 inx = 0
 for k in range(5):
   for l in range(2):
-    heatmaps.append(axs[k, l*2].imshow(np.array(attr_occ[inx][0]), cmap='summer', interpolation='nearest'))
+    heatmaps.append(axs[k, l*2].imshow(np.array(attr_occ[inx][0]), cmap='RdGy', interpolation='nearest', vmin = -1, vmax = 1))
     cbars.append(plt.colorbar(heatmaps[-1], ax=axs[k, l*2]))
-    axs[k, l*2].set_title(str(class_net[inx]))
-    heatmaps.append(axs[k, l*2+1].imshow(alg[inx], cmap='gray', interpolation='nearest'))
+    cbars[-1].ax.tick_params(labelsize=24)
+    axs[k, l*2].set_title("Network Classification: "+str(class_net[inx]), fontsize = 24)
+    axs[k, l*2].tick_params(axis='both', labelsize=24)
+    heatmaps.append(axs[k, l*2+1].imshow(alg[inx], cmap='RdGy', interpolation='nearest', vmin = -1, vmax = 1))
     cbars.append(plt.colorbar(heatmaps[-1], ax=axs[k, l*2+1]))
-    axs[k, l*2+1].set_title(str(class_alg[inx]))
-    mat = data[inx+40]
+    cbars[-1].ax.tick_params(labelsize=24)
+    axs[k, l*2+1].set_title("Algorithm Classification: "+str(class_alg[inx]), fontsize = 24)
+    axs[k, l*2+1].tick_params(axis='both', labelsize=24)
+    mat = data[inx]
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):
-            #text_color1 = 'white' if np.array(attr_occ[inx][0])[i, j] < (-0.6) else 'black'
+            text_color1 = 'white' if np.array(attr_occ[inx][0])[i, j] < (-0.8) else 'black'
             text_color2 = 'white' if alg[inx][i, j] == (-1) else 'black'
-            text1 = axs[k, l*2].text(j, i, int(mat[i,j]), ha='center', va='center', color='black')
-            text2 = axs[k, l*2+1].text(j, i, int(mat[i,j]), ha='center', va='center', color=text_color2)
+            text1 = axs[k, l*2].text(j, i, int(mat[i,j]), ha='center', va='center', color='black', fontsize = 24)
+            text2 = axs[k, l*2+1].text(j, i, int(mat[i,j]), ha='center', va='center', color=text_color2, fontsize = 24)
     inx += 1
 
 
 plt.tight_layout()
-plt.savefig('../results/heatmaps5_inf.png')
+plt.savefig('../results/explainability/heatmaps1_inf.png')
 plt.show()

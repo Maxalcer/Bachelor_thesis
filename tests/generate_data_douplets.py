@@ -27,7 +27,7 @@ def add_douplets(mat, n):
     np.random.seed()
     matrix = mat.copy()
     douplets = generate_matrix(n)
-    rows = np.random.choice(range(10), n, replace=False)
+    rows = np.random.choice(range(50), n, replace=False)
     j = 0
     for row in rows:
       new_row = [a | b for a, b in zip(matrix[row], douplets[j])]
@@ -43,8 +43,8 @@ probs = [(1/math.exp(p)) for p in probs]
 
 probs = [(p/np.sum(probs)) for p in probs]
 
-training_data_inf = read_data_mat("../data/no_noise/unsorted/train_inf.txt")
-training_data_fin = read_data_mat("../data/no_noise/unsorted/train_fin.txt")
+training_data_inf = read_data_mat("../data/10x50/no_noise/train_inf_10x50.txt")
+training_data_fin = read_data_mat("../data/10x50/no_noise/train_fin_10x50.txt")
 
 for i in range(len(training_data_fin)):
   if(i % 5000 == 0): print(i/5000, "%")
@@ -57,11 +57,11 @@ for i in range(len(training_data_fin)):
     training_data_fin[i] = add_douplets(training_data_fin[i], ran_n)
 
 
-write_data("../data/douplets/no_noise/unsorted/train_douplets_inf.txt", training_data_inf)
-write_data("../data/douplets/no_noise/unsorted/train_douplets_fin.txt", training_data_fin)
+write_data("../data/10x50/douplets/no_noise/train_inf_10x50_douplets.txt", training_data_inf)
+write_data("../data/10x50/douplets/no_noise/train_fin_10x50_douplets.txt", training_data_fin)
 
-testing_data_inf = read_data_mat("../data/no_noise/unsorted/test_inf.txt")
-testing_data_fin = read_data_mat("../data/no_noise/unsorted/test_fin.txt")
+testing_data_inf = read_data_mat("../data/10x50/no_noise/test_inf_10x50.txt")
+testing_data_fin = read_data_mat("../data/10x50/no_noise/test_fin_10x50.txt")
 
 testing_data_inf_1 = []
 testing_data_inf_2 = []
@@ -78,12 +78,12 @@ for i in range(len(testing_data_inf)):
   testing_data_fin_2.append(add_douplets(testing_data_fin[i], 2))
   testing_data_fin_3.append(add_douplets(testing_data_fin[i], 3))
 
-write_data("../data/douplets/no_noise/unsorted/test_douplets_1_inf.txt", testing_data_inf_1)
-write_data("../data/douplets/no_noise/unsorted/test_douplets_1_fin.txt", testing_data_fin_1)
-write_data("../data/douplets/no_noise/unsorted/test_douplets_2_inf.txt", testing_data_inf_2)
-write_data("../data/douplets/no_noise/unsorted/test_douplets_2_fin.txt", testing_data_fin_2)
-write_data("../data/douplets/no_noise/unsorted/test_douplets_3_inf.txt", testing_data_inf_3)
-write_data("../data/douplets/no_noise/unsorted/test_douplets_3_fin.txt", testing_data_fin_3)
+write_data("../data/10x50/douplets/no_noise/test_inf_10x50_douplets_1.txt", testing_data_inf_1)
+write_data("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_1.txt", testing_data_fin_1)
+write_data("../data/10x50/douplets/no_noise/test_inf_10x50_douplets_2.txt", testing_data_inf_2)
+write_data("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_2.txt", testing_data_fin_2)
+write_data("../data/10x50/douplets/no_noise/test_inf_10x50_douplets_3.txt", testing_data_inf_3)
+write_data("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_3.txt", testing_data_fin_3)
 
 
 
