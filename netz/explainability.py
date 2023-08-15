@@ -6,6 +6,8 @@ from captum.attr import Occlusion
 import matplotlib.pyplot as plt
 
 def check_inf_sites_arg(m):
+  erg_col = list()
+  erg_row = list()
   for i in range(np.shape(m)[1]):
     for j in range(i+1, np.shape(m)[1]):
       col1 = m[:,i]
@@ -16,12 +18,14 @@ def check_inf_sites_arg(m):
       found_diff = ((len(list(set(indices1) - set(indices2))) != 0) & (len(list(set(indices2) - set(indices1))) != 0))
       found_same = (len(list(set(indices1) & set(indices2))) != 0)
 
-      if found_diff & found_same: return [i, j], (list(set(indices1) - set(indices2)) + list(set(indices2) - set(indices1)) + list(set(indices1) & set(indices2)))
-  return list(), list()
+      if found_diff & found_same: 
+        erg_col.append([i, j])
+        erg_row.append(list(set(indices1) - set(indices2)) + list(set(indices2) - set(indices1)) + list(set(indices1) & set(indices2)))
+  return erg_col, erg_row
 
 netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
 #data = read_data_tens("../data/test_fin_sorted.txt")
-data = read_data_tens("../data/noise/sorted/test_inf_noise_15_sorted.txt")
+data = read_data_tens("../data/noise/sorted/test_fin_noise_15_sorted.txt")
 netzfc.eval()
 #ig = IntegratedGradients(netzfc)
 occ = Occlusion(netzfc)
@@ -31,15 +35,16 @@ class_alg = []
 alg = []
 i = 0
 while i < 10:
-  mat = data[i].unsqueeze(0)
+  mat = data[i+10].unsqueeze(0)
   class_net.append(int(torch.round(netzfc(mat))[0]))
   attr_occ.append(occ.attribute(mat, sliding_window_shapes=(1,1)))
   class_alg.append(int(check_inf_sites(mat[0])))
   a = np.zeros((10,10))
   cols, rows = check_inf_sites_arg(mat[0])
-  for col in cols:
-    for row in rows:
-      a[row, col] = -1
+  for j in range(len(cols)):
+    for col in cols[j]:
+      for row in rows[j]:
+        a[row, col] = -1
   alg.append(a)
   i += 1
 
@@ -60,7 +65,7 @@ for k in range(5):
     cbars[-1].ax.tick_params(labelsize=24)
     axs[k, l*2+1].set_title("Algorithm Classification: "+str(class_alg[inx]), fontsize = 24)
     axs[k, l*2+1].tick_params(axis='both', labelsize=24)
-    mat = data[inx]
+    mat = data[inx+10]
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):
             text_color1 = 'white' if np.array(attr_occ[inx][0])[i, j] < (-0.8) else 'black'
@@ -71,5 +76,5 @@ for k in range(5):
 
 
 plt.tight_layout()
-plt.savefig('../results/explainability/heatmaps1_inf.png')
+plt.savefig('../results/explainability/heatmaps2_fin.png')
 plt.show()
