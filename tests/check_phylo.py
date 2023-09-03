@@ -1,7 +1,10 @@
+import sys
+sys.path.append('../..')
+
 from hlp_fncs import *
 import numpy as np
-import string
-import subprocess
+
+# Checks how many matrices violate the ISM for a given File
 
 data_inf = read_data_mat("../data/test_fin.txt")
 

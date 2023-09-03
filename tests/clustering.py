@@ -1,5 +1,10 @@
+import sys
+sys.path.append('../..')
+
 import numpy as np
 from scipy.cluster.hierarchy import average, leaves_list
+
+# test if the clustering algorithm works
 
 def rotate(mat):
   return np.array(list(zip(*mat[::-1])))

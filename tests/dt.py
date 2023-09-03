@@ -1,8 +1,13 @@
+import sys
+sys.path.append('../..')
+
 from sklearn import tree
 import numpy as np
 import random
 import matplotlib.pyplot as plt
 from hlp_fncs import *
+
+# test if a decision tree is able to solve the Problem
 
 inf = read_data_mat("../data/train_inf_noise_sorted.txt")
 
