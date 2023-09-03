@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../..')
+sys.path.append('../')
 
 from hlp_fncs import *
 import numpy as np

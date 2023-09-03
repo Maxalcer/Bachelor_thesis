@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../networks/net_implementations')
-sys.path.append('../..')
+sys.path.append('../')
 
 import numpy as np
 from hlp_fncs import *
