@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 # Creates a single heatmap which visualizes the results of the occlusion algorithm next to a matix with marked entries which belong to a ISM violation 
 
 netzfc = torch.load('../saved_nets/saved_fc_netz.py', map_location=torch.device('cpu'))
-data = read_data_tens("../../data/noise/sorted/test_inf_noise_15_sorted.txt")
+data = read_data_tens("../../data/10x10/noise/sorted/test_inf_noise_15_sorted.txt")
 netzfc.eval()
 
 occ = Occlusion(netzfc)

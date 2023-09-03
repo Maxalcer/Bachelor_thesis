@@ -11,8 +11,8 @@ import numpy as np
 
 # training script for a FCNN for matices with size 10x10
 
-training_data = get_train_dataset("../../data/no_noise/sorted/train_fin_cluster.txt", "../../data/no_noise/sorted/train_inf_cluster.txt", 256)
-testing_data = get_train_dataset("../../data/no_noise/sorted/test_fin_cluster.txt", "../../data/no_noise/sorted/test_inf_cluster.txt", 10)
+training_data = get_train_dataset("../../data/10x10/no_noise/sorted/train_fin_cluster.txt", "../../data/10x10/no_noise/sorted/train_inf_cluster.txt", 256)
+testing_data = get_train_dataset("../../data/10x10/no_noise/sorted/test_fin_cluster.txt", "../../data/10x10/no_noise/sorted/test_inf_cluster.txt", 10)
 
 netz = FC_Netz()
 

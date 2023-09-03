@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 netzfc = torch.load('../saved_nets/saved_fc_netz.py', map_location=torch.device('cpu'))
 #data = read_data_tens("../data/test_fin_sorted.txt")
-data = read_data_tens("../../data/noise/sorted/test_fin_noise_15_sorted.txt")
+data = read_data_tens("../../data/10x10/noise/sorted/test_fin_noise_15_sorted.txt")
 netzfc.eval()
 #ig = IntegratedGradients(netzfc)
 occ = Occlusion(netzfc)

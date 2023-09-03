@@ -10,7 +10,7 @@ from fc_netz import *
 # calculates the median number of ISM violations for matrices that get falsy classified by the network
 
 netzfc = torch.load('saved_fc_netz.py', map_location=torch.device('cpu'))
-data = get_train_dataset("../data/noise/sorted/test_fin_noise_15_sorted.txt", "../data/noise/sorted/test_inf_noise_15_sorted.txt", 1)
+data = get_train_dataset("../data/10x10/noise/sorted/test_fin_noise_15_sorted.txt", "../data/10x10/noise/sorted/test_inf_noise_15_sorted.txt", 1)
 f = 0
 fn = 0
 fp = 0

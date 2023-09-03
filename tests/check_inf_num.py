@@ -6,8 +6,8 @@ from hlp_fncs import *
 
 # calculates the median number of ISM violations in matrices generated and not generated under the ISM with beta=15%
 
-data_fin = read_data_mat("../data/noise/unsorted/test_fin_noise_15.txt")
-data_inf = read_data_mat("../data/noise/unsorted/test_inf_noise_15.txt")
+data_fin = read_data_mat("../data/10x10/noise/unsorted/test_fin_noise_15.txt")
+data_inf = read_data_mat("../data/10x10/noise/unsorted/test_inf_noise_15.txt")
 
 num_fin = 0
 num_inf = 0

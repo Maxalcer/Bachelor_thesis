@@ -52,7 +52,7 @@ acc_25 = []
 noise = []
 b = 0
 
-testing_data10 = get_train_dataset("../../data/no_noise/unsorted/test_fin.txt", "../../data/no_noise/unsorted/test_inf.txt", 1)
+testing_data10 = get_train_dataset("../../data/10x10/no_noise/unsorted/test_fin.txt", "../../data/10x10/no_noise/unsorted/test_inf.txt", 1)
 testing_data15 = get_train_dataset("../../data/15x15/no_noise/test_fin_15x15.txt", "../../data/15x15/no_noise/test_inf_15x15.txt", 1)
 testing_data25 = get_train_dataset("../../data/25x25/no_noise/test_fin_25x25.txt", "../../data/25x25/no_noise/test_inf_25x25.txt", 1)
 # Calculting the accuracy for different levels of beta

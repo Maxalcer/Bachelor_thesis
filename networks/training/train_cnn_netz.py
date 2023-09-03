@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 
 # training script for the CNN
 
-training_data = get_train_dataset("../../data/noise/sorted/train_fin_noise_sorted.txt", "../../data/noise/sorted/train_inf_noise_sorted.txt", 256)
-testing_data = get_train_dataset("../../data/noise/sorted/test_fin_noise_5_sorted.txt", "../../data/noise/sorted/test_inf_noise_5_sorted.txt", 10)
+training_data = get_train_dataset("../../data/10x10/noise/sorted/train_fin_noise_sorted.txt", "../../data/10x10/noise/sorted/train_inf_noise_sorted.txt", 256)
+testing_data = get_train_dataset("../../data/10x10/noise/sorted/test_fin_noise_5_sorted.txt", "../../data/10x10/noise/sorted/test_inf_noise_5_sorted.txt", 10)
 netz = Netz()
 
 netz = netz.cuda()

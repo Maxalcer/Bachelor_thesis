@@ -41,7 +41,7 @@ noise = []
 
 b = 0
 
-testing_data = get_train_dataset("../../data/no_noise/unsorted/test_fin.txt", "../../data/no_noise/unsorted/test_inf.txt", 1)
+testing_data = get_train_dataset("../../data/10x10/no_noise/unsorted/test_fin.txt", "../../data/10x10/no_noise/unsorted/test_inf.txt", 1)
 
 # Calutaing FNR and FPR for different levels of beta
 while (b <= 0.5):

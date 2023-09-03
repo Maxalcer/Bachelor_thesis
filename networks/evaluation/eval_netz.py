@@ -56,7 +56,7 @@ noise = []
 
 b = 0
 
-testing_data = get_train_dataset("../../data/no_noise/unsorted/test_fin.txt", "../../data/no_noise/unsorted/test_inf.txt", 1)
+testing_data = get_train_dataset("../../data/10x10/no_noise/unsorted/test_fin.txt", "../../data/10x10/no_noise/unsorted/test_inf.txt", 1)
 #testing_data_big = get_train_dataset("../data/test_fin_12x12.txt", "../data/test_inf_12x12.txt", 1)
 # Calculting the accuracy for different levels of beta
 while (b <= 0.5):
