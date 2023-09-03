@@ -1,4 +1,9 @@
+import sys
+sys.path.append('../')
+
 from hlp_fncs import *
+
+# Script to sort data
 
 train_data_fin = read_data_mat("../data/no_noise/unsorted/train_fin.txt")
 train_data_inf = read_data_mat("../data/no_noise/unsorted/train_inf.txt")

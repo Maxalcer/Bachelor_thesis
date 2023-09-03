@@ -1,10 +1,13 @@
+import sys
+sys.path.append('../')
+
 from hlp_fncs import *
-import random
 import subprocess
 import math
 import numpy as np
 from math import comb
 
+# generate a matrix with a variable number of rows under the ISM using MS
 def generate_matrix(ncols):
   process = subprocess.Popen([r'./ms', '50', '1', '-t', '5.0', '-s', str(ncols)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=r'/buffer/ag_bsc/pmsb_23/max_alcer/bachelorarbeit/msdir')
   result = process.communicate()
@@ -17,18 +20,13 @@ def generate_matrix(ncols):
 
    
 probs = range(1,4)
-
 probs = [(1/math.exp(p)) for p in probs]
-
 probs = [(p/np.sum(probs)) for p in probs]
 
 orig_data = []
-
 train_data = []
 
 c = 0
-
-# new_row = [a ^ b for a, b in zip(matrix[row], matrix[row+10])]
 
 for i in range(1000):
   if(i % 5000 == 0): print(i/5000, "%")
@@ -41,7 +39,8 @@ for i in range(1000):
 
   matrix = temp_data[0][:]
   break_inf_loop = 0
-    
+  
+  # Break in case it takes to many tries to add an ISM viovaltion to the matrix and create a new matrix
   while(check_inf_sites(matrix)):
     matrix = temp_data[0]
     if break_inf_loop > comb(10, n):
@@ -65,6 +64,7 @@ for i in range(1000):
 
 write_data("../data/10x50/no_noise/test_fin_10x50.txt", train_data)
 
+# Save the data with random seeds and extra columns for traceability
 with open("../data/original/test_original_fin_10x50.txt", "w") as file:
   for mat, seeds, n in orig_data:
     seedstr = [str(seed) for seed in seeds]

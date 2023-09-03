@@ -1,10 +1,15 @@
+import sys
+sys.path.append('../')
+
 from hlp_fncs import *
-import random
 import subprocess
 import math
 import numpy as np
 from math import comb
 
+# Scribt for adding doublets to generated data
+
+# generate a matrix with a variable number of rows under the ISM using MS
 def generate_matrix(nrows):
   ex = 0
   if nrows == 1: 
@@ -22,6 +27,7 @@ def generate_matrix(nrows):
     matrix = np.delete(matrix, (1), axis=0)
   return matrix #, seeds
 
+# Adding a variable number of doublets to a matrix
 def add_douplets(mat, n):
   while True:
     np.random.seed()

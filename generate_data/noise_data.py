@@ -1,5 +1,11 @@
+import sys
+sys.path.append('../')
+
 from hlp_fncs import *
 import numpy as np
+
+# Script for adding alpha and beta (with seperate levels) to the data
+
 alpha = 10**(-5)
 
 train_data_fin = read_data_mat("../data/10x50/douplets/no_noise/train_fin_10x50_douplets.txt")
@@ -7,6 +13,7 @@ train_data_inf = read_data_mat("../data/10x50/douplets/no_noise/train_inf_10x50_
 
 beta = 0.05
 
+# Noises the Trainging Data with 0.05 <= beta <= 0.25
 if (len(train_data_fin) == len(train_data_fin)):
 
   beta_step = 0.2/len(train_data_fin)
@@ -25,6 +32,7 @@ del train_data_inf, train_data_fin
 test_data_inf = read_data_mat("../data/10x50/douplets/no_noise/test_inf_10x50_douplets_1.txt")
 test_data_fin = read_data_mat("../data/10x50/douplets/no_noise/test_fin_10x50_douplets_1.txt")
 
+# Noises the testing data with fixed beta
 if (len(test_data_fin) == len(test_data_fin)):
 
   test_noise_5_inf = []
